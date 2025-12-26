@@ -74,7 +74,7 @@ with st.sidebar:
 st.markdown("""
     <div class="main-header">
         <h1>GG ASSISTANT</h1>
-        <p>Your AI-Powered Guide to Gyan Ganga Institute of Technology & Sciences</p>
+        <p>Your Gyan Ganga Institute of Technology & Sciences</p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -135,3 +135,4 @@ if prompt := st.chat_input("Poochiye GGITS ke baare mein..."):
     with st.chat_message("assistant"): st.markdown(ans)
     st.session_state.messages.append({"role": "assistant", "content": ans})
     st.rerun()
+
