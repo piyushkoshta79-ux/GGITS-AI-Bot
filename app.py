@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd
+import json
 import numpy as np
 import random
 from sentence_transformers import SentenceTransformer
@@ -8,141 +8,118 @@ from scipy.spatial.distance import cosine
 # 1. PAGE SETUP
 st.set_page_config(page_title="GGITS Official AI Assistant", layout="wide", initial_sidebar_state="expanded")
 
-# 2. GOOGLE SHEET LINK (Yahan apna CSV link paste karein)
-SHEET_URL = "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv"
+# 2. SESSION STATE
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "info_box" not in st.session_state:
+    st.session_state.info_box = None
 
-# 3. RESPONSIVE DESIGN (Laptop + Mobile optimized)
+# 3. RESPONSIVE DESIGN & SIDEBAR CONTACT
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
     .stApp { background: linear-gradient(135deg, #f8f9fc 0%, #eef2f7 100%) !important; font-family: 'Inter', sans-serif; }
     
-    /* Header/Title Styling */
+    /* Responsive Title */
     .title-text { 
         text-align: center; 
         background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d); 
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
         font-weight: 800; 
-        margin-top: -10px;
-    }
-
-    /* Buttons Styling */
-    div.stButton > button { 
-        width: 100%; 
-        border-radius: 20px; 
-        border: 1px solid rgba(26, 42, 108, 0.1) !important; 
-        background: rgba(255, 255, 255, 0.9) !important; 
-        color: #1a2a6c !important; 
-        font-weight: 800 !important; 
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04) !important;
-        transition: all 0.3s ease;
-    }
-    div.stButton > button:hover { transform: translateY(-5px); background: #1a2a6c !important; color: white !important; }
-
-    /* Info Box */
-    .info-display { 
-        background: #ffffff; 
-        color: #000000; 
-        padding: 20px; 
-        border-radius: 20px; 
-        margin-top: 15px;
         margin-bottom: 20px; 
-        border-left: 8px solid #1a2a6c; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+    }
+    @media (max-width: 768px) { .title-text { font-size: 28px !important; margin-top: 0px; } }
+    @media (min-width: 769px) { .title-text { font-size: 52px !important; } }
+
+    /* Buttons Style */
+    div.stButton > button { 
+        height: 100px; width: 100%; border-radius: 20px; 
+        border: 1px solid rgba(26, 42, 108, 0.1) !important; 
+        background: white !important; color: #1a2a6c !important; 
+        font-weight: 800 !important; font-size: 14px !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important; 
     }
 
-    /* Mobile Adjustments */
-    @media (max-width: 768px) {
-        .title-text { font-size: 28px !important; margin-bottom: 15px; }
-        div.stButton > button { height: 75px !important; font-size: 13px !important; padding: 5px !important; }
-        .info-display { font-size: 14px !important; }
+    /* Sidebar Contact Details */
+    .contact-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 12px;
+        color: white;
+        font-size: 13px;
+        border-left: 4px solid #ef4444;
+        margin-top: 20px;
     }
-
-    /* Laptop Adjustments */
-    @media (min-width: 769px) {
-        .title-text { font-size: 50px !important; margin-bottom: 25px; }
-        div.stButton > button { height: 140px !important; font-size: 18px !important; }
-    }
-
-    /* Sidebar Fix */
-    .sidebar-heading { color: #000000 !important; text-align: center; font-weight: 900; font-size: 24px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 20px; }
+    
+    .sidebar-heading { color: #000000 !important; text-align: center; font-weight: 900; font-size: 22px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; }
     [data-testid="stSidebar"] { background: #0f172a !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. SESSION STATE
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-if "info_box" not in st.session_state:
-    st.session_state.info_box = None
-
-# 5. SIDEBAR
+# 4. SIDEBAR (With Contact Details)
 with st.sidebar:
     st.markdown('<div class="sidebar-heading">GGITS HUB</div>', unsafe_allow_html=True)
-    if st.button("🗑️ CLEAR CHAT"):
+    if st.button("🗑️ CLEAR CONVERSATION"):
         st.session_state.messages = []
         st.session_state.info_box = None
         st.rerun()
+    
+    # College Contact Info
+    st.markdown("""
+    <div class="contact-card">
+        <b>📞 Contact Us:</b><br>
+        Admission: 0761-2673654<br>
+        Email: info@ggits.org<br><br>
+        <b>📍 Location:</b><br>
+        Jabalpur, Madhya Pradesh
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.write("---")
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
 
-# 6. HEADER & RESPONSIVE BUTTONS
+# 5. HEADER (Aaju-Baju Buttons)
 st.markdown('<div class="title-text">GGITS AI ASSISTANT</div>', unsafe_allow_html=True)
 
-# 2x2 Grid for Mobile, automatic scaling for Desktop
+# Ise 2-2 columns mein divide kiya hai taaki mobile mein aaju-baju rahein
 col1, col2 = st.columns(2)
-col3, col4 = st.columns(2)
-
 with col1:
-    if st.button("🎓\nADMISSION"): st.session_state.info_box = "🎓 **ADMISSION 2024:** Enrollment open for B.Tech, MBA, & B.Pharm. 📍 Admin Block, Window 1."
+    if st.button("🎓\nADMISSION"): st.session_state.info_box = "🎓 **ADMISSION 2024:** Enrollment open for B.Tech, MBA, & B.Pharm."
 with col2:
-    if st.button("💼\nPLACEMENTS"): st.session_state.info_box = "💼 **PLACEMENTS:** Highest Package ₹12.5 LPA. Top Recruiters: TCS, Cisco, Amdocs."
+    if st.button("💼\nPLACEMENT"): st.session_state.info_box = "💼 **PLACEMENTS:** Highest Package ₹12.5 LPA. Recruiters: TCS, Cisco."
+
+col3, col4 = st.columns(2)
 with col3:
-    if st.button("💰\nFEES INFO"): st.session_state.info_box = "💰 **FEES:** B.Tech Tuition ~₹78,000/yr. Medhavi & Post-Metric Scholarship available."
+    if st.button("💰\nFEES"): st.session_state.info_box = "💰 **FEES:** B.Tech ~₹78,000/yr. Scholarships available."
 with col4:
-    if st.button("🏛️\nINFRA"): st.session_state.info_box = "🏛️ **CAMPUS:** Smart Labs, Lifts, and 25-Acre Wi-Fi enabled campus."
+    if st.button("🏛️\nINFRA"): st.session_state.info_box = "🏛️ **CAMPUS:** Smart Labs, 25-Acre Wi-Fi enabled campus."
 
 if st.session_state.info_box:
-    st.markdown(f'<div class="info-display">{st.session_state.info_box}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="info-display" style="background:white; padding:20px; border-radius:20px; border-left:8px solid #1a2a6c; margin-bottom:20px;">{st.session_state.info_box}</div>', unsafe_allow_html=True)
 
-# 7. AI LOGIC (Google Sheet Integration)
+# 6. AI LOGIC
 @st.cache_resource
 def load_resources():
     model = SentenceTransformer('all-MiniLM-L6-v2')
-    try:
-        df = pd.read_csv(SHEET_URL)
-        questions = df['Question'].astype(str).tolist()
-        answers = df['Answer'].astype(str).tolist()
-        embeddings = model.encode(questions)
-        return model, embeddings, answers
-    except:
-        return model, None, None
+    # Dummy data (Aap apna poora data yahan rakh sakte hain)
+    master_data = {"intents": [{"tag": "hi", "patterns": ["hi"], "responses": ["Hello!"]}]}
+    pats, maps = [], []
+    for intent in master_data['intents']:
+        for p in intent['patterns']:
+            pats.append(p.lower()); maps.append(intent)
+    return model, model.encode(pats), maps
 
-model, embeddings, answers = load_resources()
+model, embeddings, intent_map = load_resources()
 
-# Render Chat History
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🔵" if msg["role"]=="assistant" else "🔴"):
         st.markdown(msg["content"])
 
-# 8. INTERACTIVE CHAT
-if prompt := st.chat_input("Poochiye (e.g. Parking kahan hai, HOD list)..."):
+if prompt := st.chat_input("Poochiye..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="🔴"):
-        st.markdown(prompt)
-
-    if embeddings is not None:
-        u_vec = model.encode([prompt.lower()])
-        sims = [1 - cosine(u_vec[0], p_vec) for p_vec in embeddings]
-        
-        if max(sims) > 0.38: 
-            response = answers[np.argmax(sims)]
-        else:
-            response = "🏢 **GGITS Office:** Iska data sheet mein nahi mila. Please contact 0761-2673654. 😊"
-    else:
-        response = "⚠️ **System Error:** Google Sheet link check karein!"
-
-    with st.chat_message("assistant", avatar="🔵"):
-        st.markdown(response)
+    u_vec = model.encode([prompt.lower()])
+    sims = [1 - cosine(u_vec[0], p_vec) for p_vec in embeddings]
+    response = "🏢 **GGITS Office:** Specific data not found." if max(sims) < 0.35 else "Jawab mil gaya!"
     st.session_state.messages.append({"role": "assistant", "content": response})
     st.rerun()
