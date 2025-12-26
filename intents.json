@@ -1,0 +1,19 @@
+{
+  "intents": [
+    {
+      "tag": "hod_cs",
+      "patterns": ["hod of cs", "cse head", "ashok verma"],
+      "responses": ["👨‍🏫 **HOD CSE:** Dr. Ashok Verma."]
+    },
+    {
+      "tag": "hod_it",
+      "patterns": ["hod of it", "it head", "rk rawat"],
+      "responses": ["👨‍🏫 **HOD IT:** Prof. R.K. Rawat."]
+    },
+    {
+      "tag": "parking",
+      "patterns": ["where is parking", "parking area", "bike parking"],
+      "responses": ["🅿️ **Parking:** Large dedicated parking available near the main entrance for all students."]
+    }
+  ]
+}
