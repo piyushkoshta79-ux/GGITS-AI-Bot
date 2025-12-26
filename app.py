@@ -38,6 +38,17 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
 
+    /* DEVELOPER CARD STYLING */
+    .dev-card {
+        background: linear-gradient(135deg, #1a2a6c 0%, #2a48ad 100%);
+        padding: 15px;
+        border-radius: 15px;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(26, 42, 108, 0.2);
+    }
+
     /* ATTRACTIVE CLEAR BUTTON */
     .stButton > button {
         border-radius: 12px !important;
@@ -66,6 +77,16 @@ st.markdown("""
 with st.sidebar:
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    # --- PIYUSH KOSHTA DEVELOPER CARD ---
+    st.markdown("""
+    <div class="dev-card">
+        <p style="margin:0; font-size:12px; opacity:0.8; text-transform:uppercase; letter-spacing:1px;">Lead Developer</p>
+        <h3 style="margin:5px 0; font-size:20px; font-weight:800;">PIYUSH KOSHTA</h3>
+        <div style="width:30px; height:2px; background:#fdbb2d; margin: 10px auto;"></div>
+        <p style="margin:0; font-size:13px;">AI & Data Solutions</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Custom Info Card
     st.markdown("""
