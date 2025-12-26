@@ -8,8 +8,7 @@ from scipy.spatial.distance import cosine
 st.set_page_config(page_title="GGITS AI Assistant", layout="wide", initial_sidebar_state="expanded")
 
 # --- GOOGLE SHEET CONNECTION ---
-SHEET_URL ="https://docs.google.com/spreadsheets/d/1Rwe3CrCrXM8l3zNwHJWijbWRVjOvrMCFtJdiSUj9QGk/export?format=csv"
-
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1Rwe3CrCrXM8l3zNwHJWijbWRVjOvrMCFtJdiSUj9QGk/export?format=csv"
 # 2. SESSION STATE
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -95,4 +94,5 @@ if prompt := st.chat_input("Poochiye (e.g., Fees kya hai?)..."):
     with st.chat_message("assistant"): st.markdown(ans)
     st.session_state.messages.append({"role": "assistant", "content": ans})
     st.rerun()
+
 
