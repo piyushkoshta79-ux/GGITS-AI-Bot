@@ -109,3 +109,4 @@ if prompt := st.chat_input("Poochiye..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.session_state.messages.append({"role": "assistant", "content": "Thinking..."})
     st.rerun()
+
