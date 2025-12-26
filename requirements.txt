@@ -1,5 +1,3 @@
 streamlit
 pandas
 sentence-transformers
-numpy
-scipy
