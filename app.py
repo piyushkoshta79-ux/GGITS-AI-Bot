@@ -10,7 +10,7 @@ st.set_page_config(page_title="GG Assistant", page_icon="🤖", layout="wide", i
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 3. PREMIUM CSS (Design as it is + Sidebar Enhancements)
+# 3. ADVANCED CSS (Sidebar aur Buttons ko sundar banane ke liye)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
@@ -21,59 +21,70 @@ st.markdown("""
         padding: 35px; border-radius: 20px; text-align: center; color: white;
         box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 30px;
     }
-    .main-header h1 { font-weight: 800; font-size: 40px; margin: 0; letter-spacing: 1px; }
 
-    /* Sidebar Attractive Styling */
-    [data-testid="stSidebar"] { background-color: #ffffff !important; border-right: 2px solid #eee; }
+    /* SIDEBAR BOX STYLING */
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+        border-right: 2px solid #f0f2f6;
+    }
     
-    .sidebar-card {
-        background: #f8f9fa; padding: 15px; border-radius: 12px;
-        border-left: 5px solid #b21f1f; margin-bottom: 20px; font-size: 13px;
+    .sidebar-info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        border-left: 5px solid #1a2a6c;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
 
-    /* Delete Button - Extra Attractive */
-    .stButton > button[kind="secondary"] {
-        background: linear-gradient(90deg, #ff4b2b, #ff416c) !important;
-        color: white !important; border: none !important;
-        border-radius: 12px !important; font-weight: 600 !important;
-        height: 45px !important; width: 100% !important;
-        transition: 0.3s; box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
+    /* ATTRACTIVE CLEAR BUTTON */
+    .stButton > button {
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease;
     }
-    .stButton > button[kind="secondary"]:hover {
-        transform: scale(1.02); box-shadow: 0 6px 15px rgba(255, 75, 43, 0.4);
+    
+    /* Horizontal Quick Buttons */
+    div[data-testid="stHorizontalBlock"] div.stButton > button {
+        height: 90px !important;
+        background: white !important;
+        color: #1a2a6c !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
     }
-
-    /* Quick Buttons Styling */
-    div.stButton > button:not([kind="secondary"]) {
-        border-radius: 15px !important; height: 90px !important; width: 100% !important;
-        background: white !important; color: #1a2a6c !important; font-weight: 700 !important;
-        border: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    
+    div[data-testid="stHorizontalBlock"] div.stButton > button:hover {
+        background: #1a2a6c !important;
+        color: white !important;
+        transform: translateY(-3px);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. SIDEBAR (Attractive Version)
+# 4. ATTRACTIVE SIDEBAR
 with st.sidebar:
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Attractive Clear Chat Section
-    st.markdown("### ⚙️ Actions")
-    if st.button("🗑️ CLEAR HISTORY", kind="secondary"):
+    # Custom Info Card
+    st.markdown("""
+    <div class="sidebar-info-card">
+        <h4 style="margin:0; color:#1a2a6c;">🤖 GG Help Center</h4>
+        <p style="font-size:12px; color:#555; margin-top:5px;">
+            Aap mujhse Admission, Fees, aur Placements ke sawal puch sakte hain.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Attractive Clear Button
+    if st.button("🗑️ CLEAR CHAT HISTORY", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
     
     st.markdown("---")
-    
-    # Sidebar Info Card
-    st.markdown("""
-    <div class="sidebar-card">
-        <b>💡 Tip:</b><br>
-        Aap Admission, Fees ya Placement ke baare mein sawal puch sakte hain!
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("📞 **Helpline:**<br>0761-2673654", unsafe_allow_html=True)
+    st.markdown("📞 **Helpline:** 0761-2673654")
+    st.markdown("🌐 **Web:** [ggits.org](https://ggits.org)")
 
 # 5. HEADER
 st.markdown("""
