@@ -10,7 +10,7 @@ st.set_page_config(page_title="GG Assistant", page_icon="🤖", layout="wide", i
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 3. PREMIUM CSS (Design as it is)
+# 3. PREMIUM CSS (Design as it is + Sidebar Enhancements)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
@@ -23,30 +23,57 @@ st.markdown("""
     }
     .main-header h1 { font-weight: 800; font-size: 40px; margin: 0; letter-spacing: 1px; }
 
-    [data-testid="stHorizontalBlock"] { gap: 10px !important; }
+    /* Sidebar Attractive Styling */
+    [data-testid="stSidebar"] { background-color: #ffffff !important; border-right: 2px solid #eee; }
     
-    div.stButton > button {
+    .sidebar-card {
+        background: #f8f9fa; padding: 15px; border-radius: 12px;
+        border-left: 5px solid #b21f1f; margin-bottom: 20px; font-size: 13px;
+    }
+
+    /* Delete Button - Extra Attractive */
+    .stButton > button[kind="secondary"] {
+        background: linear-gradient(90deg, #ff4b2b, #ff416c) !important;
+        color: white !important; border: none !important;
+        border-radius: 12px !important; font-weight: 600 !important;
+        height: 45px !important; width: 100% !important;
+        transition: 0.3s; box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
+    }
+    .stButton > button[kind="secondary"]:hover {
+        transform: scale(1.02); box-shadow: 0 6px 15px rgba(255, 75, 43, 0.4);
+    }
+
+    /* Quick Buttons Styling */
+    div.stButton > button:not([kind="secondary"]) {
         border-radius: 15px !important; height: 90px !important; width: 100% !important;
         background: white !important; color: #1a2a6c !important; font-weight: 700 !important;
         border: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-        transition: 0.3s;
-    }
-    div.stButton > button:hover {
-        background: #1a2a6c !important; color: white !important;
-        transform: translateY(-3px) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. SIDEBAR
+# 4. SIDEBAR (Attractive Version)
 with st.sidebar:
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🗑️ Reset Chat"):
+    
+    # Attractive Clear Chat Section
+    st.markdown("### ⚙️ Actions")
+    if st.button("🗑️ CLEAR HISTORY", kind="secondary"):
         st.session_state.messages = []
         st.rerun()
+    
     st.markdown("---")
-    st.write("📞 **Support:** 0761-2673654")
+    
+    # Sidebar Info Card
+    st.markdown("""
+    <div class="sidebar-card">
+        <b>💡 Tip:</b><br>
+        Aap Admission, Fees ya Placement ke baare mein sawal puch sakte hain!
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("📞 **Helpline:**<br>0761-2673654", unsafe_allow_html=True)
 
 # 5. HEADER
 st.markdown("""
@@ -72,7 +99,7 @@ with col2:
 with col3:
     if st.button("💰\nFEES INFO"): st.session_state.messages.append({"role": "assistant", "content": actions["💰\nFEES INFO"]})
 with col4:
-    if st.button("🏛️\nINFRA"): st.session_state.messages.append({"role": "assistant", "content": actions["🏛️\nINFRA"]})
+    if st.button("🏛️\nINFRASTRUCTURE"): st.session_state.messages.append({"role": "assistant", "content": actions["🏛️\nINFRA"]})
 
 # 7. AI BRAIN
 @st.cache_resource
@@ -90,21 +117,18 @@ def load_ai():
 
 model, embeddings, kb = load_ai()
 
-# --- RENDER CHAT WITH ICONS ---
+# --- RENDER CHAT ---
 for msg in st.session_state.messages:
-    # Assistant ke liye Robot icon, User ke liye Student icon
     avatar_icon = "🤖" if msg["role"] == "assistant" else "🧑‍🎓"
     with st.chat_message(msg["role"], avatar=avatar_icon):
         st.markdown(msg["content"])
 
 # 8. CHAT INPUT
 if prompt := st.chat_input("Poochiye GGITS ke baare mein..."):
-    # Save User message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="🧑‍🎓"): 
         st.markdown(prompt)
 
-    # Bot logic
     u_vec = model.encode([prompt.lower()])
     sims = [1 - cosine(u_vec[0], p_vec) for p_vec in embeddings]
     
@@ -113,7 +137,6 @@ if prompt := st.chat_input("Poochiye GGITS ke baare mein..."):
     else:
         ans = "🏢 **GG Assistant:** I'm not sure about that. Please contact the college office at 0761-2673654."
 
-    # Assistant reply with icon
     with st.chat_message("assistant", avatar="🤖"):
         st.markdown(ans)
     
