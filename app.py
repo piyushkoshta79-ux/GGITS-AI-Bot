@@ -10,31 +10,32 @@ st.set_page_config(page_title="GG Assistant", page_icon="🤖", layout="wide", i
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 3. RED-WHITE-BLACK THEME CSS
+# 3. ADVANCED RED-BLACK-WHITE CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
     
-    /* Background and Font */
-    .stApp { background-color: #ffffff; font-family: 'Poppins', sans-serif; }
+    /* Background */
+    .stApp { background-color: #fcfcfc; font-family: 'Poppins', sans-serif; }
     
-    /* Main Header - Red & Black Gradient */
+    /* Main Header - Matches PPT Gradient */
     .main-header {
-        background: linear-gradient(135deg, #000000 0%, #b21f1f 100%);
+        background: linear-gradient(135deg, #b21f1f 0%, #1a1a1a 100%);
         padding: 35px; border-radius: 20px; text-align: center; color: white;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(178, 31, 31, 0.2); margin-bottom: 30px;
+        border-bottom: 4px solid #b21f1f;
     }
+    .main-header h1 { font-weight: 800; font-size: 42px; margin: 0; letter-spacing: 2px; }
 
-    /* Sidebar Styling - Black Background */
+    /* SIDEBAR STYLING - Sleek Black & Red */
     section[data-testid="stSidebar"] {
-        background-color: #111111 !important;
-        border-right: 2px solid #b21f1f;
+        background-color: #0f0f0f !important;
+        border-right: 3px solid #b21f1f;
     }
     section[data-testid="stSidebar"] .stMarkdown, section[data-testid="stSidebar"] p {
-        color: white !important;
+        color: #ffffff !important;
     }
     
-    /* Sidebar Info Card */
     .sidebar-info-card {
         background: #1a1a1a;
         padding: 20px;
@@ -44,44 +45,49 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* Developer Card - Red Theme */
+    /* PIYUSH KOSHTA DEVELOPER CARD - Matches PPT Intro */
     .dev-card {
-        background: linear-gradient(135deg, #b21f1f 0%, #ff1f1f 100%);
-        padding: 15px;
+        background: linear-gradient(135deg, #b21f1f 0%, #000000 100%);
+        padding: 20px;
         border-radius: 15px;
         color: white;
         text-align: center;
         margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(178, 31, 31, 0.3);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* Quick Action Buttons - Red & White */
+    /* ATTRACTIVE BUTTONS */
+    .stButton > button {
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease;
+    }
+    
+    /* Horizontal Quick Buttons - Clean White & Red */
     div[data-testid="stHorizontalBlock"] div.stButton > button {
-        height: 90px !important;
+        height: 100px !important;
         background: white !important;
         color: #b21f1f !important;
-        border: 2px solid #b21f1f !important;
-        font-weight: 700 !important;
-        border-radius: 15px !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-        transition: all 0.3s ease;
+        border: 1px solid #eeeeee !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+        font-size: 16px !important;
     }
     
     div[data-testid="stHorizontalBlock"] div.stButton > button:hover {
         background: #b21f1f !important;
         color: white !important;
-        transform: translateY(-3px);
+        border: 1px solid #b21f1f !important;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(178, 31, 31, 0.3) !important;
     }
 
-    /* Clear Chat Button */
-    .stButton > button {
-        border-radius: 12px !important;
-        font-weight: 600 !important;
-    }
+    /* Chat Bubbles Styling */
+    .stChatMessage { background-color: #ffffff !important; border: 1px solid #f0f0f0; border-radius: 15px; }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. SIDEBAR
+# 4. ATTRACTIVE SIDEBAR
 with st.sidebar:
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
@@ -89,37 +95,37 @@ with st.sidebar:
     # --- PIYUSH KOSHTA DEVELOPER CARD ---
     st.markdown("""
     <div class="dev-card">
-        <p style="margin:0; font-size:12px; opacity:0.9; text-transform:uppercase; letter-spacing:1px;">Lead Developer</p>
-        <h3 style="margin:5px 0; font-size:20px; font-weight:800; color:white;">PIYUSH KOSHTA</h3>
-        <div style="width:30px; height:2px; background:white; margin: 10px auto;"></div>
-        <p style="margin:0; font-size:13px; color:white;">AI & Data Solutions</p>
+        <p style="margin:0; font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:2px;">Project Lead</p>
+        <h3 style="margin:5px 0; font-size:22px; font-weight:800; color:#ffffff;">PIYUSH KOSHTA</h3>
+        <div style="width:40px; height:3px; background:#b21f1f; margin: 12px auto;"></div>
+        <p style="margin:0; font-size:13px; color:#cccccc;">AI & Machine Learning</p>
     </div>
     """, unsafe_allow_html=True)
     
     # Custom Info Card
     st.markdown("""
     <div class="sidebar-info-card">
-        <h4 style="margin:0; color:#b21f1f;">🤖 GG Help Center</h4>
-        <p style="font-size:12px; color:#cccccc; margin-top:5px;">
-            Aap mujhse Admission, Fees, aur Placements ke sawal puch sakte hain.
+        <h4 style="margin:0; color:#ff4b4b;">❤️ Campus Support</h4>
+        <p style="font-size:12px; color:#bbbbbb; margin-top:5px;">
+            Harnessing NLP to transform campus interactions at GGITS.
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Clear Button
-    if st.button("🗑️ CLEAR CHAT HISTORY", use_container_width=True):
+    # Clear Chat History Button (Black/Red Style)
+    if st.button("🗑️ RESET CONVERSATION", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
     
     st.markdown("---")
-    st.markdown("<p style='color:white;'>📞 <b>Helpline:</b> 0761-2673654</p>", unsafe_allow_html=True)
-    st.markdown("<p style='color:white;'>🌐 <b>Web:</b> <a href='https://ggits.org' style='color:#ff1f1f;'>ggits.org</a></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#888888; font-size:12px;'>Official Helpline:<br><b>0761-2673654</b></p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#888888; font-size:12px;'>Institutional Web:<br><a href='https://ggits.org' style='color:#b21f1f; text-decoration:none;'>www.ggits.org</a></p>", unsafe_allow_html=True)
 
 # 5. HEADER
 st.markdown("""
     <div class="main-header">
         <h1>GG ASSISTANT</h1>
-        <p>Gyan Ganga Institute of Technology & Sciences</p>
+        <p style="opacity:0.9; font-weight:400; letter-spacing:1px;">Intelligent Campus Concierge • AI-Powered</p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -127,8 +133,8 @@ st.markdown("""
 col1, col2, col3, col4 = st.columns(4)
 actions = {
     "🎓\nADMISSION": "Admission 2024 is open! You can apply through MP DTE Counselling or visit the campus.",
-    "💼\nPLACEMENTS": "GGITS Placements are top-notch. Highest package: 12.5 LPA. Top companies: TCS, Cisco, Amdocs.",
-    "💰\nFEES INFO": "B.Tech Fees: ~78,000 per year. Scholarships like Medhavi & Post-Metric are available.",
+    "💼\nPLACEMENTS": "GGITS Placements are top-notch. Highest package: ₹12.5 LPA. Top companies: TCS, Cisco, Amdocs.",
+    "💰\nFEES INFO": "B.Tech Fees: ~₹78,000 per year. Scholarships like Medhavi & Post-Metric are available.",
     "🏛️\nINFRA": "25-Acre Smart Campus with advanced labs, library, and Wi-Fi facilities."
 }
 
@@ -164,7 +170,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # 8. CHAT INPUT
-if prompt := st.chat_input("Poochiye GGITS ke baare mein..."):
+if prompt := st.chat_input("Ask GG Assistant..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="🧑‍🎓"): 
         st.markdown(prompt)
