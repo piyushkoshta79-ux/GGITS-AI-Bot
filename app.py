@@ -115,7 +115,7 @@ with st.sidebar:
         <p style="margin:0; font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:2px;">Project Lead</p>
         <h3 style="margin:5px 0; font-size:22px; font-weight:800; color:#ffffff;">PIYUSH KOSHTA</h3>
         <div style="width:40px; height:3px; background:#b21f1f; margin: 12px auto;"></div>
-        <p style="margin:0; font-size:13px; color:#cccccc;">AI & Machine Learning</p>
+        <p style="margin:0; font-size:13px; color:#cccccc;">AI & ROBOTICS </p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -140,7 +140,7 @@ with st.sidebar:
 st.markdown("""
     <div class="main-header">
         <h1>GG ASSISTANT</h1>
-        <p style="opacity:0.9; font-weight:400; letter-spacing:1px;">Intelligent Campus Concierge • AI-Powered</p>
+        <p style="opacity:0.9; font-weight:400; letter-spacing:1px;">Intelligent Campus Concierge </p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -202,3 +202,4 @@ if prompt := st.chat_input("Ask GG Assistant..."):
     
     st.session_state.messages.append({"role": "assistant", "content": ans})
     st.rerun()
+
