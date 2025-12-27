@@ -10,15 +10,13 @@ st.set_page_config(page_title="GG Assistant", page_icon="🤖", layout="wide", i
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 3. ADVANCED RED-BLACK-WHITE CSS
+# 3. THEME MATCHED CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
     
-    /* Background */
     .stApp { background-color: #fcfcfc; font-family: 'Poppins', sans-serif; }
     
-    /* Main Header - Matches PPT Gradient */
     .main-header {
         background: linear-gradient(135deg, #b21f1f 0%, #1a1a1a 100%);
         padding: 35px; border-radius: 20px; text-align: center; color: white;
@@ -27,7 +25,6 @@ st.markdown("""
     }
     .main-header h1 { font-weight: 800; font-size: 42px; margin: 0; letter-spacing: 2px; }
 
-    /* SIDEBAR STYLING - Sleek Black & Red */
     section[data-testid="stSidebar"] {
         background-color: #0f0f0f !important;
         border-right: 3px solid #b21f1f;
@@ -45,7 +42,6 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* PIYUSH KOSHTA DEVELOPER CARD - Matches PPT Intro */
     .dev-card {
         background: linear-gradient(135deg, #b21f1f 0%, #000000 100%);
         padding: 20px;
@@ -57,14 +53,21 @@ st.markdown("""
         border: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* ATTRACTIVE BUTTONS */
-    .stButton > button {
+    /* THEME MATCHED RESET BUTTON */
+    .stSidebar .stButton > button {
+        background-color: #222 !important;
+        color: #ffffff !important;
+        border: 1px solid #b21f1f !important;
         border-radius: 12px !important;
-        font-weight: 600 !important;
         transition: all 0.3s ease;
     }
+    .stSidebar .stButton > button:hover {
+        background-color: #b21f1f !important;
+        color: white !important;
+        border: 1px solid white !important;
+    }
     
-    /* Horizontal Quick Buttons - Clean White & Red */
+    /* Horizontal Quick Buttons */
     div[data-testid="stHorizontalBlock"] div.stButton > button {
         height: 100px !important;
         background: white !important;
@@ -72,6 +75,7 @@ st.markdown("""
         border: 1px solid #eeeeee !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
         font-size: 16px !important;
+        border-radius: 15px !important;
     }
     
     div[data-testid="stHorizontalBlock"] div.stButton > button:hover {
@@ -79,20 +83,33 @@ st.markdown("""
         color: white !important;
         border: 1px solid #b21f1f !important;
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(178, 31, 31, 0.3) !important;
     }
 
-    /* Chat Bubbles Styling */
-    .stChatMessage { background-color: #ffffff !important; border: 1px solid #f0f0f0; border-radius: 15px; }
+    /* THEME MATCHED CHATING BUBBLES */
+    [data-testid="stChatMessage"] {
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    /* Assistant bubble with red touch */
+    [data-testid="stChatMessage"]:nth-child(even) {
+        background-color: #fff !important;
+        border-left: 5px solid #b21f1f !important;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    }
+    /* User bubble with sleek grey/black touch */
+    [data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #f1f1f1 !important;
+        border-right: 5px solid #1a1a1a !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. ATTRACTIVE SIDEBAR
+# 4. SIDEBAR
 with st.sidebar:
     st.image("https://ggits.org/wp-content/uploads/2021/03/ggits-logo.png", use_container_width=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # --- PIYUSH KOSHTA DEVELOPER CARD ---
     st.markdown("""
     <div class="dev-card">
         <p style="margin:0; font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:2px;">Project Lead</p>
@@ -102,7 +119,6 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    # Custom Info Card
     st.markdown("""
     <div class="sidebar-info-card">
         <h4 style="margin:0; color:#ff4b4b;">❤️ Campus Support</h4>
@@ -112,7 +128,6 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    # Clear Chat History Button (Black/Red Style)
     if st.button("🗑️ RESET CONVERSATION", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
@@ -163,7 +178,6 @@ def load_ai():
 
 model, embeddings, kb = load_ai()
 
-# --- RENDER CHAT ---
 for msg in st.session_state.messages:
     avatar_icon = "🤖" if msg["role"] == "assistant" else "🧑‍🎓"
     with st.chat_message(msg["role"], avatar=avatar_icon):
